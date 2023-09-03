@@ -1,4 +1,5 @@
 // const http = require("http");
+const cors = require("cors");
 
 let persons = [
   {
@@ -32,11 +33,27 @@ let persons = [
 // app.listen(PORT);
 // console.log(`Server running on port ${PORT}`);
 const express = require("express");
+const morgan = require("morgan");
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const port = 3001;
+// app.use(morgan("tiny"));
+
+morgan.token("content", (req, res) => {
+  if (req.method === "POST") {
+    const body = JSON.stringify(req.body);
+    return body;
+  }
+});
+
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms :content]"
+  )
+);
 
 app.get("/", (req, res) => {
   res.send("<h1>hello world</h1>");
@@ -59,7 +76,6 @@ app.get("/api/persons/:id", (request, response) => {
 app.delete("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   persons = persons.filter((person) => person.id !== id);
-  console.log("deleted");
   response.status(204).end();
 });
 
@@ -99,7 +115,7 @@ const infoPage = `Phonebook has info for ${persons.length}
 <br/>
 ${new Date()}`;
 
-app.get("/info", (req, res) => {
+app.get("/api/info", (req, res) => {
   res.send(infoPage);
 });
 /*--------------------*/
