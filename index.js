@@ -56,7 +56,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.send("<h1>hello world dicks</h1>");
+  res.send("<h1>the game</h1>");
 });
 
 app.get("/api/persons", (req, res) => {
