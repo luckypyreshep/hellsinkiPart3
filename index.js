@@ -41,7 +41,7 @@ app.use(cors());
 
 app.use(express.static("dist"));
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 // app.use(morgan("tiny"));
 
 morgan.token("content", (req, res) => {
